@@ -1,4 +1,5 @@
-from flask import Flask,request,url_for,abort
+import hmac
+from flask import Flask,request,url_for,abort,current_app
 import os
 import sys
 
@@ -10,7 +11,7 @@ def index():
     return "Hello!"
 
 @app.route("/gitee", methods=["POST"])
-def gitee():
+def handle_gitee_hook():
     if 'User-Agent' in request.headers:
         if request.headers.get('User-Agent') == 'git-oschina-hook':
             if request.headers.get('X-Gitee-Token') == 'dbce613a94b51bcba5bb381983653613':
@@ -24,15 +25,15 @@ def gitee():
         abort(403)
 
 @app.route("/github",methods=["POST"])
-def github():
-    if 'User-Agent' in request.headers:
-        if request.headers.get('User-Agent') == 'GitHub-Hookshot/******':
-            os.system('/bin/sh ./scripts/redeploy.sh')
-            return "success!"
-        else:
-            abort(403)
-    else:
-        abort(403) 
+def handle_github_hook():
+    """ Entry point for github app """
+    signature = request.headers.get('X-Hub-Signature') 
+    sha, signature = signature.split('=')
+    secret = str.encode(current_app.config.get('GITHUB_SECRET'))
+    hashhex = hmac.new(secret, request.data, digestmod='sha1').hexdigest()
+    if hmac.compare_digest(hashhex, signature): 
+        return "success! github~ "
+    return "end"
 
 @app.errorhandler(403)
 def forbidden(error):
