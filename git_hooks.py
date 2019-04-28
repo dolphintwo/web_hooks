@@ -23,6 +23,17 @@ def gitee():
     else:
         abort(403)
 
+@app.route("/github",methods=["POST"])
+def github():
+    if 'User-Agent' in request.headers:
+        if request.headers.get('User-Agent') == 'GitHub-Hookshot/******':
+            os.system('/bin/sh ./scripts/redeploy.sh')
+            return "success!"
+        else:
+            abort(403)
+    else:
+        abort(403) 
+
 @app.errorhandler(403)
 def forbidden(error):
     return "Forbidden\n"
