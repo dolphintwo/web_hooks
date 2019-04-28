@@ -34,7 +34,7 @@ def handle_github_hook():
     if hmac.compare_digest(hashhex, signature): 
         return "success! github "
     else:
-        return "failure! github"
+        return "failure! github "
 
 @app.errorhandler(403)
 def forbidden(error):
