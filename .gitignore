@@ -1,0 +1,7 @@
+.vscode/
+
+scripts/*.sh
+
+.python-version
+*.pyc
+web_hooks.log
