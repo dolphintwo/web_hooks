@@ -32,8 +32,9 @@ def handle_github_hook():
     secret = str.encode(current_app.config.get('GITHUB_SECRET'))
     hashhex = hmac.new(secret, request.data, digestmod='sha1').hexdigest()
     if hmac.compare_digest(hashhex, signature): 
-        return "success! github~ "
-    return "end"
+        return "success! github "
+    else:
+        return "failure! github"
 
 @app.errorhandler(403)
 def forbidden(error):
