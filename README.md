@@ -9,5 +9,5 @@
 ```shell
 pip install -r requirements.txt
 
-python gitee_hooks.py 10081
+nohup python git_hooks.py 40081 >> web_hooks.log 2>&1 &
 ```
