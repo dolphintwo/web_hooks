@@ -29,7 +29,7 @@ def handle_github_hook():
     """ Entry point for github app """
     signature = request.headers.get('X-Hub-Signature') 
     sha, signature = signature.split('=')
-    secret = str.encode(current_app.config.get('GITHUB_SECRET'))
+    secret = str.encode('dbce613a94b51bcba5bb381983653613')
     hashhex = hmac.new(secret, request.data, digestmod='sha1').hexdigest()
     if hmac.compare_digest(hashhex, signature): 
         return "success! github "
